@@ -1,0 +1,109 @@
+﻿@page "/tax-calculation"
+
+@rendermode InteractiveServer
+@using MediatR
+@using BolsaIR.Application.Features.TaxCalculation.Queries.GetAnnualTaxCalculation
+@using BolsaIR.Application.Features.TaxCalculation.Results
+
+@inject IMediator Mediator
+
+<PageTitle>Apuração de IR</PageTitle>
+
+<h3>Apuração de IR</h3>
+
+<div class="row mb-3">
+
+    <div class="col-2">
+
+        <InputNumber class="form-control" @bind-Value="SelectedYear" />
+
+    </div>
+
+    <div class="col-auto">
+
+        <button class="btn btn-primary" @onclick="Calculate">
+            Calcular
+        </button>
+
+    </div>
+
+</div>
+
+@if (Loading)
+{
+    <p>Calculando...</p>
+}
+
+@if (Result is not null)
+{
+    <hr />
+
+    <h4>Apuração Mensal</h4>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Mês</th>
+                <th>Compras</th>
+                <th>Vendas</th>
+                <th>Lucro</th>
+                <th>Prejuízo Acumulado</th>
+                <th>Lucro Tributável</th>
+                <th>Alíquota</th>
+                <th>DARF</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var month in Result.Months)
+            {
+                <tr>
+                    <td>@month.Month/@month.Year</td>
+
+                    <td>@month.TotalPurchases.ToString("C")</td>
+
+                    <td>@month.TotalSales.ToString("C")</td>
+
+                    <td>@month.NetProfit.ToString("C")</td>
+
+                    <td>@month.AccumulatedLossAfter.ToString("C")</td>
+
+                    <td>@month.TaxableProfit.ToString("C")</td>
+
+                    <td>@month.TaxRate.ToString("P")</td>
+
+                    <td>@month.DarfValue.ToString("C")</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+@code {
+    private int SelectedYear = DateTime.Now.Year;
+
+    private bool Loading;
+
+    private AnnualTaxResult? Result;
+
+    private async Task Calculate()
+    {
+        Loading = true;
+
+        try
+        {
+            Result = await Mediator.Send(
+                new GetAnnualTaxCalculationQuery(SelectedYear));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            throw;
+        }
+        finally
+        {
+            Loading = false;
+        }
+    }
+}

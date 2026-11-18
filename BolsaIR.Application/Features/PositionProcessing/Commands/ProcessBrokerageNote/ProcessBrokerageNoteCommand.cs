@@ -1,0 +1,8 @@
+﻿using BolsaIR.Application.Common;
+using MediatR;
+
+namespace BolsaIR.Application.Features.PositionProcessing.Commands.ProcessBrokerageNote;
+
+public sealed record ProcessBrokerageNoteCommand(
+	Guid BrokerageNoteId)
+	: IRequest<Result>;

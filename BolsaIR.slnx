@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="BolsaIR.Application/BolsaIR.Application.csproj" />
+  <Project Path="BolsaIR.Domain/BolsaIR.Domain.csproj" />
+  <Project Path="BolsaIR.Infrastructure/BolsaIR.Infrastructure.csproj" />
+  <Project Path="BolsaIR.Shared/BolsaIR.Shared.csproj" />
+  <Project Path="BolsaIR.Tests/BolsaIR.Tests.csproj" Id="b6db6f7d-4c96-41d2-9470-08f83318e07b" />
+  <Project Path="BolsaIR.Web/BolsaIR.Web.csproj" />
+</Solution>

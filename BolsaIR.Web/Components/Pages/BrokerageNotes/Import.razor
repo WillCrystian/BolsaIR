@@ -1,0 +1,77 @@
+﻿@page "/brokerage-notes/import"
+@rendermode InteractiveServer
+
+@using MediatR
+@using Microsoft.AspNetCore.Components.Forms
+@using BolsaIR.Application.Features.BrokerageNotes.Commands.ImportBrokerageNote
+
+@inject IMediator Mediator
+
+<PageTitle>Importar Nota</PageTitle>
+
+<h3>Importar Nota de Corretagem</h3>
+
+<div class="card p-3">
+
+    <InputFile OnChange="OnFileSelected"
+               accept=".pdf" />
+
+    @if (_file is not null)
+    {
+        <div class="mt-3">
+
+            <strong>Arquivo:</strong>
+
+            @_file.Name
+
+        </div>
+
+        <button class="btn btn-primary mt-3"
+                @onclick="ImportNote">
+
+            Importar
+
+        </button>
+    }
+
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Message))
+{
+    <div class="alert alert-info mt-3">
+        @Message
+    </div>
+}
+
+@code
+{
+    private IBrowserFile? _file;
+
+    private string? Message;
+
+    private void OnFileSelected(InputFileChangeEventArgs e)
+    {
+        _file = e.File;
+    }
+
+    private async Task ImportNote()
+    {
+        if (_file is null)
+            return;
+
+        await using var stream =
+            _file.OpenReadStream(30 * 1024 * 1024);
+
+        var command =
+            new ImportBrokerageNoteCommand(
+                stream,
+                _file.Name);
+
+        var result =
+            await Mediator.Send(command);
+
+        Message = result.IsSuccess
+            ? "Nota importada com sucesso."
+            : result.Error.ToString();
+    }
+}

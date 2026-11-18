@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BolsaIR.Application\BolsaIR.Application.csproj" />
+    <ProjectReference Include="..\BolsaIR.Domain\BolsaIR.Domain.csproj" />
+    <ProjectReference Include="..\BolsaIR.Infrastructure\BolsaIR.Infrastructure.csproj" />
+    <ProjectReference Include="..\BolsaIR.Shared\BolsaIR.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
